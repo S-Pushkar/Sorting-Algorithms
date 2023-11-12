@@ -1,5 +1,7 @@
+// Run mingw32-make -f make.mk to create a.exe
+
 #include <stdio.h>
-#include "sorting.c"
+#include "sorting.h"
 #include "graphs.h"
 
 int main() {
