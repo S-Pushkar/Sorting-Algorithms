@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <limits.h>
 #include <strings.h>
-#include <windows.h>
 #include "sorting.h"
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <unistd.h>
+#endif
 
 // Prints the histogram of the array along with the iteration number of the sorting process
 void print_histogram(int* arr, int n, int itr) {
@@ -33,7 +37,13 @@ void print_histogram(int* arr, int n, int itr) {
         printf("%d\t", arr[i]);
     }
     printf("\n\n\n");
-    Sleep(3000);
+
+    // Portability
+    #ifdef _WIN32
+        Sleep(3000);
+    #else
+        sleep(3);
+    #endif
 }
 
 // Sorts the array using insertion sort and calls the print_histogram function
@@ -78,7 +88,24 @@ void bubble_sort(int* arr, int n) {
 }
 
 void selection_sort(int* arr, int n) {
-
+    print_histogram(arr, n, 0);
+    int i, j, min_idx;
+    int itr = 1;
+    for (i = 0; i < n-1; i++) {
+        min_idx = i;
+        for (j = i+1; j < n; j++) {
+            if (arr[j] < arr[min_idx]) {
+                min_idx = j;
+            }
+        }
+        if(min_idx != i) {
+            // swap(&arr[min_idx], &arr[i]);
+            arr[min_idx] += arr[i];
+            arr[i] = arr[min_idx] - arr[i];
+            arr[min_idx] = arr[min_idx] - arr[i];
+        }
+        print_histogram(arr, n, itr++);
+    }
 }
 
 void heap_sort(int* arr, int n) {

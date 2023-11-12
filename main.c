@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "sorting.h"
+#include "graphs.h"
 
 int main() {
     int flag = 1;
