@@ -97,7 +97,9 @@ int main() {
                     heap_sort(cloneArray, n);
                     break;
                 case 5:
-                    merge_sort(cloneArray, n);
+                    int cnt = 0;
+                    int *ptr = &cnt;
+                    merge_sort(cloneArray, n, 0, n-1, ptr);
                     break;
                 case 6:
                     print_histogram(cloneArray, n, 0);
