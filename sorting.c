@@ -32,7 +32,7 @@ void print_histogram(int* arr, int n, int itr) {
     for(int i = 0; i < n; i++) {
         printf("%d\t", arr[i]);
     }
-    printf("\n");
+    printf("\n\n\n");
     Sleep(3000);
 }
 

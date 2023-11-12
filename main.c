@@ -11,9 +11,14 @@ int main() {
         if(isArrayUsed) {
             printf("Do you want to use the preious array?\n");
             printf("If yes, enter 1.\n");
-            printf("If not, enter any other number.\n");
+            printf("If not, enter 2.\n");
+            printf("Enter any other number to quit.\n");
             int temp;
             scanf("%d", &temp);
+            if(temp != 1 && temp != 2) {
+                flag = 0;
+                break;
+            }
             arrayChoice = temp == 1 ? 1 : 0;
         }
         if(!arrayChoice || !isArrayUsed) {
@@ -25,6 +30,10 @@ int main() {
             }
         }
         isArrayUsed = 1;
+        int cloneArray[n];
+        for(int i = 0; i < n; i++) {
+            cloneArray[i] = arr[i];
+        }
         printf("Enter 1 to use Insertion sort.\n");
         printf("Enter 2 to use Bubble sort.\n");
         printf("Enter 3 to use Selection sort.\n");
@@ -36,22 +45,22 @@ int main() {
         scanf("%d", &choice);
         switch(choice) {
             case 1:
-                insertion_sort(arr, n);
+                insertion_sort(cloneArray, n);
                 break;
             case 2:
-                bubble_sort(arr, n);
+                bubble_sort(cloneArray, n);
                 break;
             case 3:
-                selection_sort(arr, n);
+                selection_sort(cloneArray, n);
                 break;
             case 4:
-                heap_sort(arr, n);
+                heap_sort(cloneArray, n);
                 break;
             case 5:
-                merge_sort(arr, n);
+                merge_sort(cloneArray, n);
                 break;
             case 6:
-                quick_sort(arr, n);
+                quick_sort(cloneArray, n);
                 break;
             default:
                 flag = 0;
