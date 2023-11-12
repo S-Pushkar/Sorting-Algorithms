@@ -4,6 +4,7 @@
 int main() {
     int flag = 1;
     int arr[100];
+    int n;
     int isArrayUsed = 0;
     int arrayChoice = 0;
     while(flag) {
@@ -15,7 +16,6 @@ int main() {
             scanf("%d", &temp);
             arrayChoice = temp == 1 ? 1 : 0;
         }
-        int n;
         if(!arrayChoice || !isArrayUsed) {
             printf("Enter the length of array to sort.(Preferrably within 20 for better visualization)\n");
             scanf("%d", &n);
