@@ -46,6 +46,12 @@ void print_histogram(int* arr, int n, int itr) {
     #endif
 }
 
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 // Sorts the array using insertion sort and calls the print_histogram function
 void insertion_sort(int* arr, int n) {
     print_histogram(arr, n, 0);
@@ -99,10 +105,7 @@ void selection_sort(int* arr, int n) {
             }
         }
         if(min_idx != i) {
-            // swap(&arr[min_idx], &arr[i]);
-            arr[min_idx] += arr[i];
-            arr[i] = arr[min_idx] - arr[i];
-            arr[min_idx] = arr[min_idx] - arr[i];
+            swap(&arr[min_idx], &arr[i]);
         }
         print_histogram(arr, n, itr++);
     }
@@ -116,6 +119,27 @@ void merge_sort(int* arr, int n) {
 
 }
 
-void quick_sort(int* arr, int n) {
+int size, itr = 1;          // Size of array and number of iterations
+int partition(int* arr, int low , int high) {
+    int pivot = arr[high];
+    int i = (low - 1);
+    for(int j = low; j <= high; j++) {
+        if(arr[j] < pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    print_histogram(arr, size, itr++);
+    return (i + 1);
+}
 
+void quick_sort(int* arr, int low, int high, int n) {
+    size = n;
+    int itr = 1;
+    if(low < high) {
+        int pi = partition(arr, low, high);
+        quick_sort(arr, low, pi - 1, n);
+        quick_sort(arr, pi + 1, high, n);
+    }
 }

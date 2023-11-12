@@ -100,7 +100,8 @@ int main() {
                     merge_sort(cloneArray, n);
                     break;
                 case 6:
-                    quick_sort(cloneArray, n);
+                    print_histogram(cloneArray, n, 0);
+                    quick_sort(cloneArray, 0, n - 1, n);
                     break;
                 default:
                     flag = 0;
