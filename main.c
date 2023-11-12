@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "sorting.h"
+#include "sorting.c"
 #include "graphs.h"
 
 int main() {
