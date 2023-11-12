@@ -84,12 +84,10 @@ void bubble_sort(int* arr, int n) {
                 swapped = 1;
             }
         }
- 
-        // If no two elements were swapped by inner loop,
-        // then break
         print_histogram(arr, n, itr++);
-        if (swapped == 0)
+        if (swapped == 0) {
             break;
+        }
     }
 }
 
@@ -120,6 +118,7 @@ void merge_sort(int* arr, int n) {
 }
 
 int size, itr = 1;          // Size of array and number of iterations
+
 int partition(int* arr, int low , int high) {
     int pivot = arr[high];
     int i = (low - 1);
