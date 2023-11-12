@@ -1,4 +1,4 @@
-// Run mingw32-make -f make.mk to create a.exe
+// Run "mingw32-make -f make.mk" to create a.exe
 
 #include <stdio.h>
 #include "sorting.h"
@@ -103,7 +103,7 @@ int main() {
                     break;
                 case 6:
                     print_histogram(cloneArray, n, 0);
-                    quick_sort(cloneArray, 0, n - 1, n);
+                    quick_sort(cloneArray, 0, n - 1, n, 1);
                     break;
                 default:
                     flag = 0;

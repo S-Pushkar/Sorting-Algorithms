@@ -9,9 +9,9 @@
 #endif
 
 void topological_sort_dfs(int graph[][2], int n) {
-    printf("Something.........\n");    
+      
 }
 
 void topological_sort_bfs(int graph[][2], int n) {
-    printf("Something.........\n");    
+       
 }

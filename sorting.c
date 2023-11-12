@@ -250,12 +250,14 @@ int partition(int* arr, int low , int high) {
     return (i + 1);
 }
 
-void quick_sort(int* arr, int low, int high, int n) {
+void quick_sort(int* arr, int low, int high, int n, int i) {
     size = n;
-    int itr = 1;
+    if(i == 1) {
+        itr = 1;
+    }
     if(low < high) {
         int pi = partition(arr, low, high);
-        quick_sort(arr, low, pi - 1, n);
-        quick_sort(arr, pi + 1, high, n);
+        quick_sort(arr, low, pi - 1, n, ++i);
+        quick_sort(arr, pi + 1, high, n, ++i);
     }
 }
