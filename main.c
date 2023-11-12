@@ -1,4 +1,4 @@
-// Run mingw32-make -f make.mk to create a.exe
+// Run "mingw32-make -f make.mk" to create a.exe
 
 #include <stdio.h>
 #include "sorting.h"
