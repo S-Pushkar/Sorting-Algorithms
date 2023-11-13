@@ -8,8 +8,17 @@
     #include <unistd.h>
 #endif
 
+//clear screen function
+void clearScreen() {
+#ifdef _WIN32
+    system("cls");
+#else
+    printf("\e[1;1H\e[2J");
+#endif
+}
 // Prints the histogram of the array along with the iteration number of the sorting process
 void print_histogram(int* arr, int n, int itr) {
+    clearScreen();
     printf("Iteration number: %d\n", itr);
     int max = INT_MIN;
     for(int i = 0; i < n; i++) {
@@ -40,7 +49,7 @@ void print_histogram(int* arr, int n, int itr) {
 
     // Portability
     #ifdef _WIN32
-        Sleep(1000);
+        Sleep(500);
     #else
         sleep(1);
     #endif
