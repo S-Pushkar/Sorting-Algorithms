@@ -117,7 +117,10 @@ void selection_sort(int* arr, int n) {
         print_histogram(arr, n, itr++);
     }
 }
-void heapify(int* arr, int n, int i) {
+
+int size, itr = 1;          // Size of array and number of iterations
+
+void heapify(int* arr, int n, int i, int _size) {
     int largest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
@@ -130,29 +133,29 @@ void heapify(int* arr, int n, int i) {
 
     if (largest != i) {
         swap(&arr[i], &arr[largest]);
-        heapify(arr, n, largest);
+        print_histogram(arr, _size, itr++);
+        heapify(arr, n, largest, _size);
     }
 }
+
 void heap_sort(int* arr, int n) {
+    print_histogram(arr, n, 0);
     // Build heap (rearrange array)
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
-
-    int itr = 1;
-
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(arr, n, i, n);
+    }
+    itr = 1;
     // One by one extract an element from the heap
     for (int i = n - 1; i > 0; i--) {
         // Move current root to end
         swap(&arr[0], &arr[i]);
-
-        // call max heapify on the reduced heap
-        heapify(arr, i, 0);
-
         print_histogram(arr, n, itr++);
+        // call max heapify on the reduced heap
+        heapify(arr, i, 0, n);
     }
 }
-void merge(int *arr, int l, int m, int r, int n, int *iter) 
-{ 
+
+void merge(int *arr, int l, int m, int r, int n, int *iter) { 
     int i, j, k; 
     int n1 = m - l + 1; 
     int n2 = r - m; 
@@ -221,8 +224,6 @@ void merge_sort(int* arr, int n, int l, int r, int *iter) {
         merge(arr, l, m, r, n, iter); 
     } 
 }
-
-int size, itr = 1;          // Size of array and number of iterations
 
 int partition(int* arr, int low , int high) {
     int pivot = arr[high];
