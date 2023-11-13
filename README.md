@@ -7,3 +7,4 @@
  - Insertion Sort
  - Bubble Sort
  - Topo Sort with BFS
+ - Topo Sort with DFS

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <limits.h>
 #include <strings.h>
 #include "graphs.h"
@@ -8,81 +9,95 @@
     #include <unistd.h>
 #endif
 
-struct Queue {
+typedef struct Queue {
     int front, rear, size;
     unsigned capacity;
     int* array;
-};
+} Queue;
+
+int stack[MAX];
+int top = 0;
+
+void push(int a) {
+    stack[top++] = a;
+}
+
+int pop() {
+    if(top == 0) {
+        return INT_MIN;
+    }
+    return stack[--top];
+}
+
+int peek() {
+    if(top == 0) {
+        return INT_MIN;
+    }
+    return stack[top - 1];
+}
+
+int stackIsEmpty() {
+    return top == 0;
+}
  
 // function to create a queue
 // of given capacity.
 // It initializes size of queue as 0
-struct Queue* createQueue(unsigned capacity)
-{
-    struct Queue* queue = (struct Queue*)malloc(
-        sizeof(struct Queue));
-    queue->capacity = capacity;
-    queue->front = queue->size = 0;
+Queue* createQueue(unsigned capacity) {
+    Queue* queue = (Queue*)malloc(sizeof(queue));
+    queue -> capacity = capacity;
+    queue -> front = queue -> size = 0;
  
     // This is important, see the enqueue
-    queue->rear = capacity - 1;
-    queue->array = (int*)malloc(
-        queue->capacity * sizeof(int));
+    queue -> rear = capacity - 1;
+    queue -> array = (int*)malloc(queue -> capacity * sizeof(int));
     return queue;
 }
  
 // Queue is full when size becomes
 // equal to the capacity
-int isFull(struct Queue* queue)
-{
-    return (queue->size == queue->capacity);
+int isFull(Queue* queue) {
+    return (queue -> size == queue -> capacity);
 }
  
 // Queue is empty when size is 0
-int isEmpty(struct Queue* queue)
-{
-    return (queue->size == 0);
+int isEmpty(Queue* queue) {
+    return (queue -> size == 0);
 }
  
 // Function to add an item to the queue.
 // It changes rear and size
-void enqueue(struct Queue* queue, int item)
-{
+void enqueue(Queue* queue, int item) {
     if (isFull(queue))
         return;
-    queue->rear = (queue->rear + 1)
-                  % queue->capacity;
-    queue->array[queue->rear] = item;
-    queue->size = queue->size + 1;
+    queue -> rear = (queue -> rear + 1) % queue -> capacity;
+    queue -> array[queue -> rear] = item;
+    queue -> size = queue -> size + 1;
 }
  
 // Function to remove an item from queue.
 // It changes front and size
-int dequeue(struct Queue* queue)
-{
+int dequeue(Queue* queue) {
     if (isEmpty(queue))
         return INT_MIN;
-    int item = queue->array[queue->front];
-    queue->front = (queue->front + 1)
-                   % queue->capacity;
-    queue->size = queue->size - 1;
+    int item = queue -> array[queue -> front];
+    queue -> front = (queue -> front + 1) % queue -> capacity;
+    queue -> size = queue -> size - 1;
     return item;
 }
  
 // Function to get front of queue
-int front(struct Queue* queue)
-{
+int front(Queue* queue) {
     if (isEmpty(queue))
         return INT_MIN;
-    return queue->array[queue->front];
+    return queue -> array[queue -> front];
 }
  
 // Function to get rear of queue
-int rear(struct Queue* queue)
-{
+int rear(Queue* queue) {
     if (isEmpty(queue))
         return INT_MIN;
-    return queue->array[queue->rear];
+    return queue -> array[queue -> rear];
 }
 
 void build_adj(graph_node* adj, int graph[][2], int n) {
@@ -114,10 +129,78 @@ int build_Indegree(int indeg[], int graph[][2], int n) {
     return countOfNodes;
 }
 
+int containsCycle(graph_node* adj, int node, int* visited, int* recStack) {
+    visited[node] = 1;
+    recStack[node] = 1;
+
+    for (int i = 0; i < adj[node].size_neighbours; i++) {
+        int neighbour = adj[node].neighbours[i];
+        if (!visited[neighbour]) {
+            if (containsCycle(adj, neighbour, visited, recStack)) {
+                return 1;
+            }
+        } else if (recStack[neighbour]) {
+            return 1;
+        }
+    }
+
+    recStack[node] = 0;
+    return 0;
+}
+
+int hasCycle(graph_node* adj, int* isNumberPresent) {
+    int visited[MAX] = {0};
+    int recStack[MAX] = {0};
+
+    for (int i = 0; i < MAX; i++) {
+        if (!visited[i] && isNumberPresent[i]) {
+            if (containsCycle(adj, i, visited, recStack)) {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+void topological_sort_dfs_helper(int node, graph_node* adj, int* vis) {
+    vis[node] = 1;
+    for(int i = 0; i < adj[node].size_neighbours; i++) {
+        int neighbour = adj[node].neighbours[i];
+        if(!vis[neighbour]) {
+            topological_sort_dfs_helper(neighbour, adj, vis);
+        }
+    }
+    push(node);
+}
+
 void topological_sort_dfs(int graph[][2], int n) {
-      graph_node adj[MAX];
-      build_adj(adj, graph, n);
-      // Pushkar Drinks :)
+    graph_node adj[MAX];
+    build_adj(adj, graph, n);
+    int vis[MAX];
+    memset(vis, 0, sizeof(vis));
+    int isNumberPresent[MAX];
+    memset(isNumberPresent, 0, sizeof(isNumberPresent));
+    int number_of_nodes = 0;
+    for(int i = 0; i < n; i++) {
+        isNumberPresent[graph[i][0]] = 1;
+        isNumberPresent[graph[i][1]] = 1;
+    }
+    if(hasCycle(adj, isNumberPresent)) {
+        printf("Topological sort is not possible because there is a cycle in the graph.\n");
+        return;
+    }
+    for(int i = 0; i < MAX; i++) {
+        number_of_nodes += isNumberPresent[i];
+        if(!vis[i] && isNumberPresent[i]) {
+            topological_sort_dfs_helper(i, adj, vis);
+        }
+    }
+    printf("Topological Sort: ");
+    while(!stackIsEmpty()) {
+        printf("%d ", pop());
+    }
+    printf("\n");
 }
 
 void topological_sort_bfs(int graph[][2], int n) {
@@ -129,7 +212,7 @@ void topological_sort_bfs(int graph[][2], int n) {
     build_adj(adj, graph, n);
     int countOfNodes = build_Indegree(indeg, graph, n);
 
-    struct Queue* q = createQueue(101);
+    Queue* q = createQueue(MAX);
     for (int i = 0; i < MAX; i++) {
         if (indeg[i] == 0) {
             enqueue(q, i);
@@ -158,7 +241,7 @@ void topological_sort_bfs(int graph[][2], int n) {
     }
 
     if (ptr != countOfNodes) {
-        printf("Topological sort is not possible because there is a cycle in the graph.");
+        printf("Topological sort is not possible because there is a cycle in the graph.\n");
         return;
     }
 
