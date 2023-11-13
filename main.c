@@ -61,11 +61,12 @@ int main() {
             isArrayUsed = 1;
         }
         if(graphOrArray == 2 && (!graphChoice || !isGraphUsed)) {
-            printf("Enter the number of edges present in graph.\n");
+            printf("Enter the number of edges present in the Directed Acyclic Graph.\n");
             scanf("%d", &edges);
-            printf("Enter the edges of the graph.\n");
+            printf("Enter the edges of the graph.(All nodes should be positive and less than or equal to 100)\n");
             for(int i = 0; i < edges; i++) {
-                scanf("%d %d", &(graph[i][0]), &(graph[i][1]));
+                scanf("%d", &(graph[i][0]));
+                scanf("%d", &(graph[i][1]));
             }
             isGraphUsed = 1;
         }
