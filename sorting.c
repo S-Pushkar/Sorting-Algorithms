@@ -40,10 +40,16 @@ void print_histogram(int* arr, int n, int itr) {
 
     // Portability
     #ifdef _WIN32
-        Sleep(3000);
+        Sleep(1000);
     #else
-        sleep(3);
+        sleep(1);
     #endif
+}
+
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 // Sorts the array using insertion sort and calls the print_histogram function
@@ -78,12 +84,10 @@ void bubble_sort(int* arr, int n) {
                 swapped = 1;
             }
         }
- 
-        // If no two elements were swapped by inner loop,
-        // then break
         print_histogram(arr, n, itr++);
-        if (swapped == 0)
+        if (swapped == 0) {
             break;
+        }
     }
 }
 
@@ -99,23 +103,161 @@ void selection_sort(int* arr, int n) {
             }
         }
         if(min_idx != i) {
-            // swap(&arr[min_idx], &arr[i]);
-            arr[min_idx] += arr[i];
-            arr[i] = arr[min_idx] - arr[i];
-            arr[min_idx] = arr[min_idx] - arr[i];
+            swap(&arr[min_idx], &arr[i]);
         }
         print_histogram(arr, n, itr++);
     }
 }
 
 void heap_sort(int* arr, int n) {
-
+    int i, j, k; 
+    int n1 = m - l + 1; 
+    int n2 = r - m; 
+  
+    // Create temp arrays 
+    int L[n1], R[n2]; 
+  
+    // Copy data to temp arrays 
+    // L[] and R[] 
+    for (i = 0; i < n1; i++) 
+        L[i] = arr[l + i]; 
+    for (j = 0; j < n2; j++) 
+        R[j] = arr[m + 1 + j]; 
+  
+    // Merge the temp arrays back 
+    // into arr[l..r] 
+    // Initial index of first subarray 
+    i = 0; 
+  
+    // Initial index of second subarray 
+    j = 0; 
+  
+    // Initial index of merged subarray 
+    k = l; 
+    while (i < n1 && j < n2) { 
+        if (L[i] <= R[j]) { 
+            arr[k] = L[i]; 
+            i++; 
+        } 
+        else { 
+            arr[k] = R[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+  
+    // Copy the remaining elements 
+    // of L[], if there are any 
+    while (i < n1) { 
+        arr[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+  
+    // Copy the remaining elements of 
+    // R[], if there are any 
+    while (j < n2) { 
+        arr[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
 }
 
-void merge_sort(int* arr, int n) {
+void merge(int *arr, int l, int m, int r, int n, int *iter) 
+{ 
+    int i, j, k; 
+    int n1 = m - l + 1; 
+    int n2 = r - m; 
+  
+    // Create temp arrays 
+    int L[n1], R[n2]; 
+  
+    // Copy data to temp arrays 
+    // L[] and R[] 
+    for (i = 0; i < n1; i++) 
+        L[i] = arr[l + i]; 
+    for (j = 0; j < n2; j++) 
+        R[j] = arr[m + 1 + j]; 
+  
+    // Merge the temp arrays back 
+    // into arr[l..r] 
+    // Initial index of first subarray 
+    i = 0; 
+  
+    // Initial index of second subarray 
+    j = 0; 
+  
+    // Initial index of merged subarray 
+    k = l; 
+    while (i < n1 && j < n2) { 
+        if (L[i] <= R[j]) { 
+            arr[k] = L[i]; 
+            i++; 
+        } 
+        else { 
+            arr[k] = R[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+  
+    // Copy the remaining elements 
+    // of L[], if there are any 
+    while (i < n1) { 
+        arr[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+  
+    // Copy the remaining elements of 
+    // R[], if there are any 
+    while (j < n2) { 
+        arr[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
+    print_histogram(arr, n, *iter);
+    (*iter)++;
+} 
 
+void merge_sort(int* arr, int n, int l, int r, int *iter) {
+    if (l < r) { 
+        // Same as (l+r)/2, but avoids 
+        // overflow for large l and h 
+        int m = l + (r - l) / 2; 
+  
+        // Sort first and second halves 
+        merge_sort(arr, n, l, m, iter); 
+        merge_sort(arr, n, m + 1, r, iter);
+  
+        merge(arr, l, m, r, n, iter); 
+    } 
 }
 
-void quick_sort(int* arr, int n) {
+int size, itr = 1;          // Size of array and number of iterations
 
+int partition(int* arr, int low , int high) {
+    int pivot = arr[high];
+    int i = (low - 1);
+    for(int j = low; j <= high; j++) {
+        if(arr[j] < pivot) {
+            i++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i + 1], &arr[high]);
+    print_histogram(arr, size, itr++);
+    return (i + 1);
+}
+
+void quick_sort(int* arr, int low, int high, int n, int i) {
+    size = n;
+    if(i == 1) {
+        itr = 1;
+    }
+    if(low < high) {
+        int pi = partition(arr, low, high);
+        quick_sort(arr, low, pi - 1, n, ++i);
+        quick_sort(arr, pi + 1, high, n, ++i);
+    }
 }
