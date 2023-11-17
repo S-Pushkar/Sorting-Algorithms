@@ -124,7 +124,7 @@ void heapify(int* arr, int n, int i, int _size) {
 
     if (largest != i) {
         swap(&arr[i], &arr[largest]);
-        print_histogram(arr, _size, itr++);
+        // print_histogram(arr, _size, itr++);
         heapify(arr, n, largest, _size);
     }
 }
@@ -140,9 +140,9 @@ void heap_sort(int* arr, int n) {
     for (int i = n - 1; i > 0; i--) {
         // Move current root to end
         swap(&arr[0], &arr[i]);
-        print_histogram(arr, n, itr++);
         // call max heapify on the reduced heap
         heapify(arr, i, 0, n);
+        print_histogram(arr, n, itr++);
     }
 }
 
